@@ -739,7 +739,7 @@ class Splash(BaseExposedObject):
         return PyResult.yield_(cmd)
 
     @command()
-    def private_jsfunc(self, func):
+    def _jsfunc(self, func):
         return _WrappedJavascriptFunction(self, func)
 
     def _http_request(self, url, headers, follow_redirects=True, body=None, browser_command="http_get"):
@@ -1048,7 +1048,7 @@ class Splash(BaseExposedObject):
                 'walltime': time.time()}
 
     @command(sets_callback=True, decode_arguments=False)
-    def private_on_request(self, callback):
+    def _on_request(self, callback):
         """
         Register a Lua callback to be called when a resource is requested.
         """
@@ -1062,7 +1062,7 @@ class Splash(BaseExposedObject):
         return True
 
     @command(sets_callback=True, decode_arguments=False)
-    def private_on_response_headers(self, callback):
+    def _on_response_headers(self, callback):
         def _callback(reply):
             exceptions = StoredExceptions()  # FIXME: exceptions are discarded
             req = _ExposedRequest.from_reply(self.lua, exceptions, reply)
@@ -1074,7 +1074,7 @@ class Splash(BaseExposedObject):
         return True
 
     @command(sets_callback=True, decode_arguments=False)
-    def private_on_response(self, callback):
+    def _on_response(self, callback):
         def _callback(reply, har_entry):
             exceptions = StoredExceptions()  # FIXME: exceptions are discarded
             req = _ExposedRequest.from_har(self.lua, exceptions, har_entry['request'])
@@ -1091,7 +1091,7 @@ class Splash(BaseExposedObject):
         return True
 
     @command(sets_callback=True, decode_arguments=False)
-    def private_call_later(self, callback, delay=None):
+    def _call_later(self, callback, delay=None):
         if delay is None:
             delay = 0
         if not isinstance(delay, (float, int)):
